@@ -42,7 +42,6 @@ public class CityDB {
         if(cursor.moveToFirst()){
             do{
                 City city = new City();
-                city.setId(cursor.getInt(cursor.getColumnIndex("id")));
                 city.setCityName(cursor.getString(cursor.getColumnIndex("city_name")));
                 city.setCityId(cursor.getString(cursor.getColumnIndex("city_id")));
                 cityList.add(city);

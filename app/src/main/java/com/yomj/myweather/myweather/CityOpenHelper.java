@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class CityOpenHelper extends SQLiteOpenHelper{
 
-    public static final String CREATE_CITY = "create table City (id integer primary key autoincreament, city_name text,city_cnty text,city_id text,city_lat text,city_lon text,city_prov text)";
+    public static final String CREATE_CITY = "create table City (id integer primary key autoincrement, city_name text,city_id text)";
 
     public CityOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
