@@ -1,7 +1,6 @@
 package com.yomj.myweather.myweather;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -11,7 +10,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -34,7 +32,7 @@ public class ChooseCity extends AppCompatActivity {
     private ListView cityListView;
     private ArrayAdapter<String> arrayAdapter;
     private List<String> dataList = new ArrayList<String>();
-    private CityDB cityDB;
+    private MyDB myDB;
     private List<City> cityList;
     private ProgressDialog progressDialog;
 
@@ -61,7 +59,7 @@ public class ChooseCity extends AppCompatActivity {
         cityListView = (ListView) findViewById(R.id.list_view);
         arrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,dataList);
         cityListView.setAdapter(arrayAdapter);
-        cityDB = CityDB.getInstance(this);
+        myDB = MyDB.getInstance(this);
         cityListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -78,7 +76,7 @@ public class ChooseCity extends AppCompatActivity {
     }
 
     private void queryCities(){
-        cityList = cityDB.loadCity();
+        cityList = myDB.loadCity();
         if(cityList.size() > 0){
             dataList.clear();
             for(City city :cityList){
@@ -98,7 +96,7 @@ public class ChooseCity extends AppCompatActivity {
             public void onFinish(String response) {
                 Log.d("Response",response);
                 boolean result = false;
-                result = Utility.handleCityResponse(cityDB,response);
+                result = Utility.handleCityResponse(myDB,response);
                 if(result){
                     runOnUiThread(new Runnable() {
                         @Override

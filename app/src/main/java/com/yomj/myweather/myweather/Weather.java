@@ -1,5 +1,6 @@
 package com.yomj.myweather.myweather;
 
+import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -11,9 +12,11 @@ import android.widget.Toast;
 
 public class Weather extends AppCompatActivity {
 
-   //String httpUrl = "https://api.heweather.com/x3/weather?city=jiaxing&key=3f059ab3038f499089810a0b28029f75";
+    String getWeatherCode = "https://api.heweather.com/x3/condition?search=allcond&key=3f059ab3038f499089810a0b28029f75";
 
     private String cityId;
+    private ProgressDialog progressDialog;
+    private MyDB myDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +46,47 @@ public class Weather extends AppCompatActivity {
     private void showWeather(){
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         Log.d("WeatherBasicResponse",sharedPreferences.getString("basicCity",""));
+    }
+
+
+    private void queryWeatherCodeFromServer(){
+        showProgressDialog();
+        HttpUtil.sendHttpRequset(getWeatherCode, new HttpCallbackListener() {
+            @Override
+            public void onFinish(String response) {
+                boolean result = false;
+                result = Utility.handleWeatherCodeResponse(myDB,response);
+                if(result){
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            closeProgressDialog();
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onError(Exception e) {
+                closeProgressDialog();
+                Toast.makeText(Weather.this,"加载失败",Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void showProgressDialog(){
+        if(progressDialog == null){
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setMessage("正在加载……");
+            progressDialog.setCanceledOnTouchOutside(false);
+        }
+        progressDialog.show();
+    }
+
+    private void closeProgressDialog(){
+        if(progressDialog != null){
+            progressDialog.dismiss();
+        }
     }
 
     @Override
