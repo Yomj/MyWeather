@@ -59,7 +59,6 @@ public class ChooseCity extends AppCompatActivity {
         cityListView = (ListView) findViewById(R.id.list_view);
         arrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,dataList);
         cityListView.setAdapter(arrayAdapter);
-        myDB = MyDB.getInstance(this);
         cityListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -76,6 +75,7 @@ public class ChooseCity extends AppCompatActivity {
     }
 
     private void queryCities(){
+        myDB = MyDB.getInstance(this);
         cityList = myDB.loadCity();
         if(cityList.size() > 0){
             dataList.clear();

@@ -20,7 +20,6 @@ public class Utility {
                 JSONObject jsonObject01 = jsonArray.getJSONObject(i);
                 String cityName = jsonObject01.getString("city");
                 String cityId = jsonObject01.getString("id");
-                Log.d("Response","cityName is " + cityName + ", cityId is " + cityId);
                 City city = new City();
                 city.setCityName(cityName);
                 city.setCityId(cityId);
@@ -58,6 +57,7 @@ public class Utility {
 
     public static void handleWeatherResponse(Context context, String response){
         try {
+            Log.d("WeahterResponse",response);
             JSONObject jsonObject = new JSONObject(response);
             JSONArray data = jsonObject.getJSONArray("HeWeather data service 3.0");
             for(int i = 0; i < data.length(); i++){
@@ -85,14 +85,14 @@ public class Utility {
                 String so2 = aqiCity.getString("so2");
                 Log.d("AqiResponse", "aqi is " + aqi + ", 空气质量类别" + qlty);
                 saveAqi(context, aqi, co, no2, o3, pm10, pm25, qlty, so2);
-                JSONObject alarms = datas.getJSONObject("alarms");
+                /*JSONObject alarms = datas.getJSONObject("alarms");
                 String level = alarms.getString("level");
                 String stat = alarms.getString("stat");
                 String alarmsTitle = alarms.getString("title");
                 String alarmsTxt = alarms.getString("txt");
                 String alarmsType = alarms.getString("type");
                 Log.d("AlarmsResponse", "alarms level is " + level);
-                saveAlarms(context, level, stat, alarmsTitle, alarmsTxt, alarmsType);
+                saveAlarms(context, level, stat, alarmsTitle, alarmsTxt, alarmsType);*/
                 JSONObject now = datas.getJSONObject("now");
                 JSONObject nowCond = now.getJSONObject("cond");
                 String nowCondCode = nowCond.getString("code");
@@ -140,7 +140,7 @@ public class Utility {
         editor.putString("so2",so2);
         editor.commit();
     }
-    public static void saveAlarms(Context context,String level,String stat,String alarmsTitle,String alarmsTxt,String alarmsType){
+    /*public static void saveAlarms(Context context,String level,String stat,String alarmsTitle,String alarmsTxt,String alarmsType){
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
         editor.putString("level",level);
         editor.putString("stat",stat);
@@ -148,7 +148,7 @@ public class Utility {
         editor.putString("alarmsTxt",alarmsTxt);
         editor.putString("alarmsType",alarmsType);
         editor.commit();
-    }
+    }*/
     public static void saveNow(Context context,String nowCondCode,String nowCondTxt,String nowFl,String nowHum,String nowPcpn,String nowPres,String nowTmp,String nowVis,String nowWindDeg,String nowWindDir,String nowWindSc,String nowWindSpd){
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
         editor.putString("nowCondCode",nowCondCode);

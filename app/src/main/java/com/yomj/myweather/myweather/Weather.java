@@ -8,7 +8,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 public class Weather extends AppCompatActivity {
 
@@ -17,11 +21,22 @@ public class Weather extends AppCompatActivity {
     private String cityId;
     private ProgressDialog progressDialog;
     private MyDB myDB;
+    private TextView cityText,publishTimeText,weatherText,tmpText,humText,pcpnText,visText,windText;
+    private ImageView weatherImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather);
+        weatherImage = (ImageView) findViewById(R.id.weather_image);
+        cityText = (TextView) findViewById(R.id.city_text);
+        publishTimeText = (TextView) findViewById(R.id.publish_time_text);
+        weatherText = (TextView) findViewById(R.id.weather_text);
+        tmpText = (TextView) findViewById(R.id.temp_text);
+        humText = (TextView) findViewById(R.id.hum_text);
+        pcpnText = (TextView) findViewById(R.id.pcpn_text);
+        visText = (TextView) findViewById(R.id.vis_text);
+        windText = (TextView) findViewById(R.id.wind_text);
         cityId = getIntent().getStringExtra("cityId");
         String httpUrl = "https://api.heweather.com/x3/weather?cityid=" + cityId +"&key=3f059ab3038f499089810a0b28029f75";
         HttpUtil.sendHttpRequset(httpUrl, new HttpCallbackListener() {
@@ -45,12 +60,22 @@ public class Weather extends AppCompatActivity {
 
     private void showWeather(){
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        Log.d("WeatherBasicResponse",sharedPreferences.getString("basicCity",""));
+        Log.d("WeatherBasicResponse", sharedPreferences.getString("basicCity", ""));
+        cityText.setText(sharedPreferences.getString("basicCity",""));
+        publishTimeText.setText(sharedPreferences.getString("basicUpdateLoc","") + "发布");
+        weatherText.setText(sharedPreferences.getString("nowCondTxt",""));
+        tmpText.setText(sharedPreferences.getString("nowTmp",""));
+        humText.setText("湿度：" +sharedPreferences.getString("nowHum",""));
+        pcpnText.setText("降雨量：" +sharedPreferences.getString("nowPcpn","") + "mm");
+        visText.setText("能见度:" + sharedPreferences.getString("nowVis","") + "km");
+        windText.setText(sharedPreferences.getString("nowWindDir","") + ":" + sharedPreferences.getString("nowWindSc",""));
+        String weatherCode = sharedPreferences.getString("nowCondCode","");
     }
 
 
     private void queryWeatherCodeFromServer(){
         showProgressDialog();
+        myDB = MyDB.getInstance(this);
         HttpUtil.sendHttpRequset(getWeatherCode, new HttpCallbackListener() {
             @Override
             public void onFinish(String response) {
