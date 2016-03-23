@@ -62,17 +62,6 @@ public class Utility {
             JSONArray data = jsonObject.getJSONArray("HeWeather data service 3.0");
             for(int i = 0; i < data.length(); i++){
                 JSONObject datas = data.getJSONObject(i);
-                JSONObject basic = datas.getJSONObject("basic");
-                String basicCity = basic.getString("city");
-                String basicCnty = basic.getString("cnty");
-                String basicId = basic.getString("id");
-                String basicLat = basic.getString("lat");
-                String basicLon = basic.getString("lon");
-                JSONObject basicUpdate = basic.getJSONObject("update");
-                String basicUpdateLoc = basicUpdate.getString("loc");
-                String basicUpdateUtc = basicUpdate.getString("utc");
-                Log.d("BasicResponse",basicCity + "当地时间是" + basicUpdateLoc);
-                saveBasic(context, basicCity, basicCnty, basicId, basicLat, basicLon, basicUpdateLoc, basicUpdateUtc);
                 JSONObject aqi0 = datas.getJSONObject("aqi");
                 JSONObject aqiCity = aqi0.getJSONObject("city");
                 String aqi = aqiCity.getString("aqi");
@@ -85,6 +74,17 @@ public class Utility {
                 String so2 = aqiCity.getString("so2");
                 Log.d("AqiResponse", "aqi is " + aqi + ", 空气质量类别" + qlty);
                 saveAqi(context, aqi, co, no2, o3, pm10, pm25, qlty, so2);
+                JSONObject basic = datas.getJSONObject("basic");
+                String basicCity = basic.getString("city");
+                String basicCnty = basic.getString("cnty");
+                String basicId = basic.getString("id");
+                String basicLat = basic.getString("lat");
+                String basicLon = basic.getString("lon");
+                JSONObject basicUpdate = basic.getJSONObject("update");
+                String basicUpdateLoc = basicUpdate.getString("loc");
+                String basicUpdateUtc = basicUpdate.getString("utc");
+                Log.d("BasicResponse",basicCity + "当地时间是" + basicUpdateLoc);
+                saveBasic(context, basicCity, basicCnty, basicId, basicLat, basicLon, basicUpdateLoc, basicUpdateUtc);
                 /*JSONObject alarms = datas.getJSONObject("alarms");
                 String level = alarms.getString("level");
                 String stat = alarms.getString("stat");
@@ -93,6 +93,50 @@ public class Utility {
                 String alarmsType = alarms.getString("type");
                 Log.d("AlarmsResponse", "alarms level is " + level);
                 saveAlarms(context, level, stat, alarmsTitle, alarmsTxt, alarmsType);*/
+                JSONArray dF = datas.getJSONArray("daily_forecast");
+                for(int j = 0;j < dF.length();j++){
+                    JSONObject dailyForecast = dF.getJSONObject(j);
+                    String dailyForecastDate = dailyForecast.getString("date");
+                    JSONObject dailyForecastAstro = dailyForecast.getJSONObject("astro");
+                    String dailyForecastAstroSr = dailyForecastAstro.getString("sr");
+                    String dailyForecastAstroSs = dailyForecastAstro.getString("ss");
+                    JSONObject dailyForecastCond = dailyForecast.getJSONObject("cond");
+                    String dailyForecastCondCodeD = dailyForecastCond.getString("code_d");
+                    String dailyForecastCondCodeN = dailyForecastCond.getString("code_n");
+                    String dailyForecastCondTxtD = dailyForecastCond.getString("txt_d");
+                    String dailyForecastCondTxtN = dailyForecastCond.getString("txt_n");
+                    String dailyForecastHum = dailyForecast.getString("hum");
+                    String dailyForecastPcpn = dailyForecast.getString("pcpn");
+                    String dailyForecastPop = dailyForecast.getString("pop");
+                    String dailyForecastPres = dailyForecast.getString("pres");
+                    JSONObject dailyForecastTmp = dailyForecast.getJSONObject("tmp");
+                    String dailyForecastTmpMax = dailyForecastTmp.getString("max");
+                    String dailyForecastTmpMin = dailyForecastTmp.getString("min");
+                    String dailyForecastVis = dailyForecast.getString("vis");
+                    JSONObject dailyForecastWind = dailyForecast.getJSONObject("wind");
+                    String dailyForecastWindDeg = dailyForecastWind.getString("deg");
+                    String dailyForecastWindDir = dailyForecastWind.getString("dir");
+                    String dailyForecastWindSc = dailyForecastWind.getString("sc");
+                    String dailyForecastWindSpd = dailyForecastWind.getString("spd");
+                    Log.d("DailyForecastResponse","date is " + dailyForecastDate + ",weatherDay is " + dailyForecastCondTxtD);
+                    //save data
+                }
+                JSONArray hF = datas.getJSONArray("hourly_forecast");
+                for(int k = 0;k < hF.length();k++){
+                    JSONObject hourlyForecast = hF.getJSONObject(k);
+                    String hourlyForecastDate = hourlyForecast.getString("date");
+                    String hourlyForecastHum = hourlyForecast.getString("hum");
+                    String hourlyForecastPop = hourlyForecast.getString("pop");
+                    String hourlyForecastPres = hourlyForecast.getString("pres");
+                    String hourlyForecastTmp = hourlyForecast.getString("tmp");
+                    JSONObject hourlyForecastWind = hourlyForecast.getJSONObject("wind");
+                    String hourlyForecastWindDeg = hourlyForecastWind.getString("deg");
+                    String hourlyForecastWindDir = hourlyForecastWind.getString("dir");
+                    String hourlyForecastWindSc = hourlyForecastWind.getString("sc");
+                    String hourlyForecastWindSpd = hourlyForecastWind.getString("spd");
+                    Log.d("HourlyForecastResponse","time is " + hourlyForecastDate + ", wind is " + hourlyForecastWindDir);
+                    //save data
+                }
                 JSONObject now = datas.getJSONObject("now");
                 JSONObject nowCond = now.getJSONObject("cond");
                 String nowCondCode = nowCond.getString("code");
@@ -109,7 +153,31 @@ public class Utility {
                 String nowWindSc = nowWind.getString("sc");
                 String nowWindSpd = nowWind.getString("spd");
                 Log.d("NowResponse", "now cond is " + nowCondTxt + ", fl is " + nowFl + ", wind dis is " + nowWindDir);
-                saveNow(context,nowCondCode,nowCondTxt,nowFl,nowHum,nowPcpn,nowPres,nowTmp,nowVis,nowWindDeg,nowWindDir,nowWindSc,nowWindSpd);
+                saveNow(context, nowCondCode, nowCondTxt, nowFl, nowHum, nowPcpn, nowPres, nowTmp, nowVis, nowWindDeg, nowWindDir, nowWindSc, nowWindSpd);
+                String status = datas.getString("status");
+                JSONObject suggestion = datas.getJSONObject("suggestion");
+                JSONObject suggestionComf = suggestion.getJSONObject("comf");
+                String suggestionComfBrf = suggestionComf.getString("brf");
+                String suggestionComfTxt = suggestionComf.getString("txt");
+                JSONObject suggestionCw = suggestion.getJSONObject("cw");
+                String suggestionCwBrf = suggestionCw.getString("brf");
+                String suggestionCwTxt = suggestionCw.getString("txt");
+                JSONObject suggestionDrsg = suggestion.getJSONObject("drsg");
+                String suggsetionDrsgBrf = suggestionDrsg.getString("brf");
+                String suggestionDrsgTxt = suggestionDrsg.getString("txt");
+                JSONObject suggestionFlu = suggestion.getJSONObject("flu");
+                String suggestionFluBrf = suggestionFlu.getString("brf");
+                String suggestionFluTxt = suggestionFlu.getString("txt");
+                JSONObject suggestionSport = suggestion.getJSONObject("sport");
+                String suggestionSportBrf = suggestionSport.getString("brf");
+                String suggestionSportTxt = suggestionSport.getString("txt");
+                JSONObject suggestionTrav = suggestion.getJSONObject("trav");
+                String suggestionTravBrf = suggestionTrav.getString("brf");
+                String suggestionTravTxt = suggestionTrav.getString("txt");
+                JSONObject suggestionUv = suggestion.getJSONObject("uv");
+                String suggestionUvBrf = suggestionUv.getString("brf");
+                String suggestionUvTxt = suggestionUv.getString("txt");
+                Log.d("SuggestionResponse", "comf is " + suggestionComfBrf + ":" + suggestionComfTxt);
             }
         }catch (Exception e){
             e.printStackTrace();

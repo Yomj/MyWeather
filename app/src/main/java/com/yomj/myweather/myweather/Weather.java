@@ -64,7 +64,7 @@ public class Weather extends AppCompatActivity {
         cityText.setText(sharedPreferences.getString("basicCity",""));
         publishTimeText.setText(sharedPreferences.getString("basicUpdateLoc","") + "发布");
         weatherText.setText(sharedPreferences.getString("nowCondTxt",""));
-        tmpText.setText(sharedPreferences.getString("nowTmp",""));
+        tmpText.setText(sharedPreferences.getString("nowTmp","") + "℃");
         humText.setText("湿度：" +sharedPreferences.getString("nowHum",""));
         pcpnText.setText("降雨量：" +sharedPreferences.getString("nowPcpn","") + "mm");
         visText.setText("能见度:" + sharedPreferences.getString("nowVis","") + "km");
